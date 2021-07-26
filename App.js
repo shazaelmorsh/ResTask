@@ -12,7 +12,8 @@ import { icons, images } from "./constants";
 import { SliderBox } from "react-native-image-slider-box";
 import { Dimensions } from "react-native";
 
-var width = Dimensions.get("window").width; //full width
+var screenWidth = Dimensions.get("window").width; //full width
+var width02 = screenWidth - 50;
 var height = Dimensions.get("window").height; //full height
 export default function App() {
 	const Images = [images.promo1, images.promo2];
@@ -58,7 +59,7 @@ export default function App() {
 				<View>
 					<SliderBox
 						ImageComponentStyle={{
-							width: width - 10,
+							width: screenWidth - 10,
 							height: 300,
 							backgroundColor: "white",
 						}}
@@ -94,11 +95,11 @@ export default function App() {
 							<TouchableOpacity
 								key={index}
 								style={{
-									marginTop: width / 5 / 5,
+									marginTop: screenWidth / 5 / 5,
 									marginLeft: 5,
 									marginRight: 5,
-									width: width / 5,
-									height: width / 5,
+									width: screenWidth / 5,
+									height: screenWidth / 5,
 								}}
 							>
 								<View
@@ -131,39 +132,31 @@ export default function App() {
 		const renderItem = ({ item }) => (
 			<TouchableOpacity
 				style={{
-					flex: 1,
-					width: "90%",
-					height: 320,
-					// paddingBottom: 10,
+					width: screenWidth - 30,
+					marginBottom: 2,
+					marginTop: 5,
 					alignSelf: "center",
+					alignContent: "center",
+					alignItems: "stretch",
 					...styles.shadow,
 				}}
 			>
 				{/* log & dish image */}
-				<View
-					style={{
-						flex: 0.6,
-						// width: "100%",
-						// height: 200,
-					}}
-				>
+				<View>
 					<Image
 						source={item.dishImage}
-						resizeMode="stretch"
+						resizeMode="cover"
 						style={{
 							width: "100%",
-							alignSelf: "flex-start",
-							// height: 200,
-							// height: 200,
+							height: 200,
 						}}
 					/>
 					<Image
 						source={icons.featured}
-						resizeMode="contain"
 						style={{
 							position: "absolute",
 							height: "50%",
-							top: 0,
+							top: -10,
 							right: 0,
 						}}
 					/>
@@ -209,28 +202,27 @@ export default function App() {
 						<Text style={{ fontSize: 15, color: "#E9D023" }}>
 							{item.Rating}
 						</Text>
+						<Text
+							style={{
+								fontSize: 12,
+								color: item.Status == "Open" ? "green" : "red",
+								fontWeight: "bold",
+								marginLeft: 5,
+							}}
+						>
+							{item.Status}
+						</Text>
 					</View>
-					<Text
-						style={{
-							fontSize: 12,
-							color: item.Status == "Open" ? "green" : "red",
-							fontWeight: "bold",
-						}}
-					>
-						{item.Status}
-					</Text>
 				</View>
 				{/* second row */}
 				<View style={styles.cardDescription}>
-					<Text style={{ fontSize: 13, color: "black" }}>{item.Type}</Text>
-					<Text style={{ fontSize: 13, color: "black" }}>{item.Pricing}</Text>
+					<Text style={styles.cardText}>{item.Type}</Text>
+					<Text style={styles.cardText}>{item.Pricing}</Text>
 				</View>
 				{/* third row */}
 				<View style={styles.cardDescription}>
-					<Text style={{ fontSize: 13, color: "black" }}>
-						{"Delivery:" + item.Delivery}
-					</Text>
-					<Text style={{ fontSize: 13, color: "black" }}>{item.Location}</Text>
+					<Text style={styles.cardText}>{"Delivery:" + item.Delivery}</Text>
+					<Text style={styles.cardText}>{item.Location}</Text>
 				</View>
 			</TouchableOpacity>
 		);
@@ -271,19 +263,21 @@ const styles = StyleSheet.create({
 		marginLeft: 16,
 	},
 	shadow: {
-		shadowOffset: { width: 10, height: 10 },
-		shadowColor: "black",
-		shadowOpacity: 1,
-		elevation: 3,
-		backgroundColor: "#0000",
-		shadowRadius: 50,
-		borderRadius: 10,
+		backgroundColor: "white",
+		borderRadius: 15,
+		elevation: 10,
 	},
 	cardDescription: {
 		flex: 0.1,
 		marginLeft: "5%",
 		marginRight: "5%",
+		marginTop: 5,
+		marginBottom: 5,
 		flexDirection: "row",
 		justifyContent: "space-between",
+	},
+	cardText: {
+		fontSize: 13,
+		color: "black",
 	},
 });
