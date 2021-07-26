@@ -6,6 +6,7 @@ import {
 	View,
 	FlatList,
 	TouchableOpacity,
+	ScrollView,
 } from "react-native";
 import { icons, images } from "./constants";
 import { SliderBox } from "react-native-image-slider-box";
@@ -52,32 +53,22 @@ export default function App() {
 	];
 	function renderSlider() {
 		return (
-			<View
-				style={{
-					marginTop: 30,
-					height: 300,
-				}}
-			>
-				<Text style={{ fontSize: 34, fontWeight: "bold", ...styles.titles }}>
-					Discover
-				</Text>
-				<View
-					style={{
-						width: "100%",
-					}}
-				>
+			<View>
+				<Text style={styles.titles}>Discover</Text>
+				<View>
 					<SliderBox
-						style={{
-							width: "100%",
+						ImageComponentStyle={{
+							width: width - 10,
+							height: 300,
 							backgroundColor: "white",
 						}}
-						resizeMode={"contain"}
+						resizeMode={"cover"}
 						images={Images}
 						dotColor="#E9D023"
-						paginationBoxVerticalPadding={40}
+						paginationBoxVerticalPadding={50}
 						paginationBoxStyle={{
-							bottom: 25,
-							right: 55,
+							bottom: 0,
+							right: 100,
 							alignSelf: "flex-end",
 						}}
 					/>
@@ -88,50 +79,47 @@ export default function App() {
 
 	function renderCategories() {
 		return (
-			<View
-				style={{
-					marginTop: 20,
-				}}
-			>
-				<Text
-					style={{
-						fontSize: 34,
-						fontWeight: "bold",
-						...styles.titles,
-					}}
-				>
-					Category
-				</Text>
+			<View>
+				<Text style={styles.titles}>Category</Text>
 				<View
 					style={{
 						flexDirection: "row",
 						flexWrap: "wrap",
-						marginLeft: 10,
-						paddingTop: 10,
+						alignContent: "center",
+						justifyContent: "center",
 					}}
 				>
 					{Icons.map((icon, index) => {
 						return (
-							<View key={index}>
-								<TouchableOpacity
+							<TouchableOpacity
+								key={index}
+								style={{
+									marginTop: width / 5 / 5,
+									marginLeft: 5,
+									marginRight: 5,
+									width: width / 5,
+									height: width / 5,
+								}}
+							>
+								<View
 									style={{
-										marginLeft: 10,
-										width: 100,
-										height: 110,
+										flexDirection: "column",
 										alignItems: "center",
+										alignContent: "center",
 									}}
 								>
-									<Image
-										source={icon}
+									<Image source={icon}></Image>
+									<Text
 										style={{
-											marginLeft: 10,
+											paddingTop: 5,
+											fontSize: 10,
+											textAlign: "center",
 										}}
-									></Image>
-									<Text style={{ paddingTop: 5, fontSize: 10 }}>
+									>
 										{IconsNames[index]}
 									</Text>
-								</TouchableOpacity>
-							</View>
+								</View>
+							</TouchableOpacity>
 						);
 					})}
 				</View>
@@ -143,29 +131,29 @@ export default function App() {
 		const renderItem = ({ item }) => (
 			<TouchableOpacity
 				style={{
-					width: width - 30,
+					flex: 1,
+					width: "90%",
 					height: 320,
-					marginLeft: 10,
-					marginRight: 10,
-					paddingBottom: 10,
-					paddingLeft: 10,
-					justifyContent: "center",
-					// ...styles.shadow,
+					// paddingBottom: 10,
+					alignSelf: "center",
+					...styles.shadow,
 				}}
 			>
 				{/* log & dish image */}
 				<View
 					style={{
-						width: "100%",
+						flex: 0.6,
+						// width: "100%",
 						// height: 200,
 					}}
 				>
 					<Image
 						source={item.dishImage}
-						resizeMode="cover"
+						resizeMode="stretch"
 						style={{
 							width: "100%",
-							height: 200,
+							alignSelf: "flex-start",
+							// height: 200,
 							// height: 200,
 						}}
 					/>
@@ -195,14 +183,7 @@ export default function App() {
 					/>
 				</View>
 				{/* <first row> */}
-				<View
-					style={{
-						marginLeft: "15%",
-						marginRight: "15%",
-						flexDirection: "row",
-						justifyContent: "space-between",
-					}}
-				>
+				<View style={styles.cardDescription}>
 					<Text
 						style={{
 							fontSize: 15,
@@ -240,28 +221,12 @@ export default function App() {
 					</Text>
 				</View>
 				{/* second row */}
-				<View
-					style={{
-						marginLeft: "10%",
-						marginRight: "10%",
-						flexDirection: "row",
-						justifyContent: "space-between",
-					}}
-				>
-					<Text style={{ fontSize: 13, color: "black" }}>
-						{"Delivery:" + item.Type}
-					</Text>
+				<View style={styles.cardDescription}>
+					<Text style={{ fontSize: 13, color: "black" }}>{item.Type}</Text>
 					<Text style={{ fontSize: 13, color: "black" }}>{item.Pricing}</Text>
 				</View>
 				{/* third row */}
-				<View
-					style={{
-						marginLeft: "10%",
-						marginRight: "10%",
-						flexDirection: "row",
-						justifyContent: "space-between",
-					}}
-				>
+				<View style={styles.cardDescription}>
 					<Text style={{ fontSize: 13, color: "black" }}>
 						{"Delivery:" + item.Delivery}
 					</Text>
@@ -271,15 +236,7 @@ export default function App() {
 		);
 		return (
 			<View>
-				<Text
-					style={{
-						fontSize: 34,
-						fontWeight: "bold",
-						...styles.titles,
-					}}
-				>
-					Featured Restaurants
-				</Text>
+				<Text style={styles.titles}>Featured Restaurants</Text>
 				<FlatList
 					data={restaurantData}
 					Vetical
@@ -292,7 +249,7 @@ export default function App() {
 	}
 
 	return (
-		<View>
+		<View style={styles.container}>
 			{renderSlider()}
 			{renderCategories()}
 			{renderRestaurants()}
@@ -302,13 +259,16 @@ export default function App() {
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 		backgroundColor: "#fff",
-		marginLeft: 16,
+		alignContent: "center",
+		justifyContent: "center",
 	},
 	titles: {
 		color: "#474746",
+		fontSize: 24,
+		fontWeight: "bold",
 		marginLeft: 16,
-		marginRight: 16,
 	},
 	shadow: {
 		shadowOffset: { width: 10, height: 10 },
@@ -318,5 +278,12 @@ const styles = StyleSheet.create({
 		backgroundColor: "#0000",
 		shadowRadius: 50,
 		borderRadius: 10,
+	},
+	cardDescription: {
+		flex: 0.1,
+		marginLeft: "5%",
+		marginRight: "5%",
+		flexDirection: "row",
+		justifyContent: "space-between",
 	},
 });
