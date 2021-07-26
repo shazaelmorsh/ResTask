@@ -1,19 +1,18 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import {
 	Image,
 	StyleSheet,
 	Text,
 	View,
-	SafeAreaView,
-	ScrollView,
 	FlatList,
 	TouchableOpacity,
 } from "react-native";
 import { icons, images } from "./constants";
-import Svg, { Path } from "react-native-svg";
 import { SliderBox } from "react-native-image-slider-box";
+import { Dimensions } from "react-native";
 
+var width = Dimensions.get("window").width; //full width
+var height = Dimensions.get("window").height; //full height
 export default function App() {
 	const Images = [images.promo1, images.promo2];
 	const Icons = [
@@ -91,7 +90,7 @@ export default function App() {
 		return (
 			<View
 				style={{
-					marginTop: 50,
+					marginTop: 20,
 				}}
 			>
 				<Text
@@ -142,97 +141,131 @@ export default function App() {
 
 	function renderRestaurants() {
 		const renderItem = ({ item }) => (
-			<TouchableOpacity>
+			<TouchableOpacity
+				style={{
+					width: width - 30,
+					height: 320,
+					marginLeft: 10,
+					marginRight: 10,
+					paddingBottom: 10,
+					paddingLeft: 10,
+					justifyContent: "center",
+					// ...styles.shadow,
+				}}
+			>
+				{/* log & dish image */}
 				<View
-				// style={
-				// 	{
-				// 		// width: "100%",
-				// 		// height: 200,
-				// 		// borderRadius: 30,
-				// 	}
-				// }
+					style={{
+						width: "100%",
+						// height: 200,
+					}}
 				>
-					{/* log & dish image */}
-					<View>
-						<Image
-							style={{
-								width: "100%",
-								height: 200,
-							}}
-							source={item.dishImage}
-							resizeMode="stretch"
-						/>
-						<Image
-							source={icons.featured}
-							resizeMode="stretch"
-							style={{
-								position: "absolute",
-								// width: 100,
-								height: "50%",
-								top: 0,
-								right: 0,
-							}}
-						/>
-						<Image
-							resizeMode="cover"
-							source={item.logo}
-							style={{
-								width: 50,
-								height: 50,
-								position: "absolute",
-								bottom: 0,
-								left: "15%",
-								borderRadius: 10,
-								borderWidth: 3,
-								borderColor: "white",
-							}}
-						/>
-					</View>
-
-					{/* <first row> */}
+					<Image
+						source={item.dishImage}
+						resizeMode="cover"
+						style={{
+							width: "100%",
+							height: 200,
+							// height: 200,
+						}}
+					/>
+					<Image
+						source={icons.featured}
+						resizeMode="contain"
+						style={{
+							position: "absolute",
+							height: "50%",
+							top: 0,
+							right: 0,
+						}}
+					/>
+					<Image
+						resizeMode="cover"
+						source={item.logo}
+						style={{
+							width: 50,
+							height: 50,
+							position: "absolute",
+							bottom: 0,
+							left: "15%",
+							borderRadius: 10,
+							borderWidth: 3,
+							borderColor: "white",
+						}}
+					/>
+				</View>
+				{/* <first row> */}
+				<View
+					style={{
+						marginLeft: "15%",
+						marginRight: "15%",
+						flexDirection: "row",
+						justifyContent: "space-between",
+					}}
+				>
+					<Text
+						style={{
+							fontSize: 15,
+							fontWeight: "bold",
+						}}
+					>
+						{item.name}
+					</Text>
 					<View
 						style={{
 							flexDirection: "row",
-							left: 50,
 							alignItems: "center",
-							alignContent: "center",
+							justifyContent: "center",
 						}}
 					>
-						<Text style={{ fontSize: 15, fontWeight: "bold" }}>
-							{item.name}
-						</Text>
 						<Image
 							source={icons.rate}
 							style={{
-								marginLeft: "40%",
 								height: 20,
 								width: 20,
-
-								// tintColor: COLORS.primary,
 							}}
 						/>
 						<Text style={{ fontSize: 15, color: "#E9D023" }}>
 							{item.Rating}
 						</Text>
-						<Text
-							style={{
-								fontSize: 12,
-								paddingLeft: 20,
-								color: item.Status == "Open" ? "green" : "red",
-								fontWeight: "bold",
-							}}
-						>
-							{item.Status}
-						</Text>
 					</View>
-					<View
+					<Text
 						style={{
-							flexDirection: "row",
-							left: 50,
-							alignItems: "center",
-							alignContent: "center",
+							fontSize: 12,
+							color: item.Status == "Open" ? "green" : "red",
+							fontWeight: "bold",
 						}}
-					></View>
+					>
+						{item.Status}
+					</Text>
+				</View>
+				{/* second row */}
+				<View
+					style={{
+						marginLeft: "10%",
+						marginRight: "10%",
+						flexDirection: "row",
+						justifyContent: "space-between",
+					}}
+				>
+					<Text style={{ fontSize: 13, color: "black" }}>
+						{"Delivery:" + item.Type}
+					</Text>
+					<Text style={{ fontSize: 13, color: "black" }}>{item.Pricing}</Text>
+				</View>
+				{/* third row */}
+				<View
+					style={{
+						marginLeft: "10%",
+						marginRight: "10%",
+						flexDirection: "row",
+						justifyContent: "space-between",
+					}}
+				>
+					<Text style={{ fontSize: 13, color: "black" }}>
+						{"Delivery:" + item.Delivery}
+					</Text>
+					<Text style={{ fontSize: 13, color: "black" }}>{item.Location}</Text>
 				</View>
 			</TouchableOpacity>
 		);
@@ -253,9 +286,6 @@ export default function App() {
 					showsHorizontalScrollIndicator={false}
 					keyExtractor={(item) => `${item.id}`}
 					renderItem={renderItem}
-					contentContainerStyle={{
-						paddingBottom: 50,
-					}}
 				></FlatList>
 			</View>
 		);
@@ -273,10 +303,20 @@ export default function App() {
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
+		marginLeft: 16,
 	},
 	titles: {
-		marginLeft: 20,
+		color: "#474746",
+		marginLeft: 16,
+		marginRight: 16,
+	},
+	shadow: {
+		shadowOffset: { width: 10, height: 10 },
+		shadowColor: "black",
+		shadowOpacity: 1,
+		elevation: 3,
+		backgroundColor: "#0000",
+		shadowRadius: 50,
+		borderRadius: 10,
 	},
 });
